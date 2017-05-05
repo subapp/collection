@@ -1,0 +1,19 @@
+{
+  "name": "colibriphp/collection",
+  "description": "Collection Library",
+  "keywords": ["php collection", "collection"],
+  "authors": [
+    {
+      "name": "Ivan Hontarenko",
+      "email": "stewie.dev@gmail.com"
+    }
+  ],
+  "license": "MIT",
+  "type": "library",
+  "require": {"php": ">=5.6"},
+  "autoload": {
+    "psr-4": {
+      "Colibri\\Collection\\": "src/"
+    }
+  }
+}
