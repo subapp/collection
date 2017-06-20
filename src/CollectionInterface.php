@@ -63,6 +63,12 @@ interface CollectionInterface extends \ArrayAccess, \IteratorAggregate, \Countab
    * @param $element
    * @return $this
    */
+  public function push($element);
+  
+  /**
+   * @param $element
+   * @return $this
+   */
   public function append($element);
   
   /**
@@ -76,13 +82,13 @@ interface CollectionInterface extends \ArrayAccess, \IteratorAggregate, \Countab
    * @return mixed
    */
   public function remove($key);
-
+  
   /**
-   * @param \Closure $closure
-   * @param array $context
-   * @return $this
+   * @param \Closure $callback
+   * @param \Closure|null $keyNameCallback
+   * @return mixed
    */
-  public function map(\Closure $closure, array $context = []);
+  public function map(\Closure $callback, \Closure $keyNameCallback = null);
 
   /**
    * @param \Closure $closure

@@ -94,6 +94,14 @@ abstract class AbstractLazyCollection implements CollectionInterface, ProxyInter
   /**
    * @inheritDoc
    */
+  public function push($element)
+  {
+    return $this->initialize()->collection->push($element);
+  }
+  
+  /**
+   * @inheritDoc
+   */
   public function prepend($element)
   {
     return $this->initialize()->collection->prepend($element);
@@ -110,9 +118,9 @@ abstract class AbstractLazyCollection implements CollectionInterface, ProxyInter
   /**
    * @inheritDoc
    */
-  public function map(\Closure $closure, array $context = [])
+  public function map(\Closure $callback, \Closure $keyNameCallback = null)
   {
-    return $this->initialize()->collection->map($closure, $context);
+    return $this->initialize()->collection->map($callback, $keyNameCallback);
   }
   
   /**

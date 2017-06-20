@@ -26,8 +26,31 @@ class ArrayCollection implements CollectionInterface
    */
   public function __construct(array $data = [], $className = null)
   {
+    $this->setClassName($className)->batch($data);
+  }
+  
+  /**
+   * @return string
+   */
+  public function getClassName()
+  {
+    return $this->className;
+  }
+  
+  /**
+   * @param string $className
+   * @return $this
+   * @throws CollectionException
+   */
+  public function setClassName($className)
+  {
+    if (null !== $className && !class_exists($className)) {
+      throw new CollectionException(sprintf('Class %s could not be found. Please set existed class name', $className));
+    }
+    
     $this->className = $className;
-    $this->batch($data);
+    
+    return $this;
   }
   
   /**
@@ -69,21 +92,25 @@ class ArrayCollection implements CollectionInterface
   /**
    * @inheritDoc
    */
-  public function set($offset = null, $data)
+  public function set($offset, $element)
   {
-    $this->storage[$offset] = $data;
-    
-    return $this;
+    return $this->doSet($offset, $element);
   }
   
   /**
    * @inheritDoc
    */
-  public function add($data)
+  public function add($element)
   {
-    $this->storage[] = $data;
-    
-    return $this;
+    return $this->push($element);
+  }
+  
+  /**
+   * @inheritDoc
+   */
+  public function push($element)
+  {
+    return $this->doSet(null, $element);
   }
   
   /**
@@ -91,9 +118,7 @@ class ArrayCollection implements CollectionInterface
    */
   public function append($element)
   {
-    array_push($this->storage, $element);
-    
-    return $this;
+    return $this->push($element);
   }
   
   /**
@@ -101,9 +126,7 @@ class ArrayCollection implements CollectionInterface
    */
   public function prepend($element)
   {
-    array_unshift($this->storage, $element);
-    
-    return $this;
+    return $this->doSet(null, $element, true);
   }
   
   /**
@@ -143,12 +166,13 @@ class ArrayCollection implements CollectionInterface
   /**
    * @inheritDoc
    */
-  public function map(\Closure $closure, array $context = [])
+  public function map(\Closure $callback, \Closure $keyNameCallback = null)
   {
     $collection = new ArrayCollection();
     
-    $this->each(function ($key, $data) use ($collection, $closure, $context) {
-      $collection->set($key, $closure($data, $context));
+    $this->each(function ($key, $element) use ($collection, $callback, $keyNameCallback) {
+      $keyName = $keyNameCallback instanceof \Closure ? $keyNameCallback($element) : $key;
+      $collection->set($keyName, $callback($element));
     });
     
     return $collection;
@@ -162,7 +186,7 @@ class ArrayCollection implements CollectionInterface
     $elements = [];
     
     $this->each(function ($key, $element) use (&$elements, $closure) {
-      if ($closure($element, $key)) {
+      if (false !== $closure($element, $key)) {
         $elements[$key] = $element;
       }
     });
@@ -289,9 +313,9 @@ class ArrayCollection implements CollectionInterface
   /**
    * @inheritDoc
    */
-  public function offsetSet($offset, $data)
+  public function offsetSet($offset, $element)
   {
-    null === $offset ? $this->add($data) : $this->set($offset, $data);
+    $this->doSet($offset, $element, false);
   }
   
   /**
@@ -332,6 +356,32 @@ class ArrayCollection implements CollectionInterface
   public function unserialize($serialized)
   {
     $this->batch(unserialize($serialized));
+  }
+  
+  /**
+   * @param null|string $keyName
+   * @param mixed $element
+   * @param bool $prepend
+   * @return $this
+   * @throws CollectionException
+   */
+  private function doSet($keyName = null, $element, $prepend = false)
+  {
+    if (null !== $this->className && !($element instanceof $this->className)) {
+      throw new CollectionException(sprintf('Collection accept only objects which %s inherited', $this->className));
+    }
+    
+    if (null === $keyName) {
+      if (true === $prepend) {
+        array_unshift($this->storage, $element);
+      } else {
+        array_push($this->storage, $element);
+      }
+    } else {
+      $this->storage[$keyName] = $element;
+    }
+    
+    return $this;
   }
   
 }
