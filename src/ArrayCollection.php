@@ -44,7 +44,7 @@ class ArrayCollection implements CollectionInterface
    */
   public function setClassName($className)
   {
-    if (null !== $className && !class_exists($className)) {
+    if (null !== $className && !class_exists($className) && !interface_exists($className)) {
       throw new CollectionException(sprintf('Class %s could not be found. Please set existed class name', $className));
     }
     
