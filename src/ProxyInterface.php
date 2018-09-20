@@ -1,22 +1,22 @@
 <?php
 
-namespace Colibri\Collection;
+namespace Subapp\Collection;
 
 /**
  * Interface ProxyInterface
- * @package Colibri\Collection
+ * @package Subapp\Collection
  */
 interface ProxyInterface
 {
 
-  /**
-   * @return mixed
-   */
-  public function initialize();
+    /**
+     * @return mixed
+     */
+    public function initialize();
 
-  /**
-   * @return boolean
-   */
-  public function isInitialized();
+    /**
+     * @return boolean
+     */
+    public function isInitialized();
 
 }

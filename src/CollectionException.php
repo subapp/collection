@@ -1,12 +1,12 @@
 <?php
 
-namespace Colibri\Collection;
+namespace Subapp\Collection;
 
 /**
  * Class CollectionException
- * @package Colibri\Collection
+ * @package Subapp\Collection
  */
 class CollectionException extends \Exception
 {
-  
+
 }

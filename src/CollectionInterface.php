@@ -1,146 +1,146 @@
 <?php
 
-namespace Colibri\Collection;
+namespace Subapp\Collection;
 
 /**
  * Interface CollectionInterface
- * @package Colibri\Collection
+ * @package Subapp\Collection
  */
 interface CollectionInterface extends \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable, \Serializable
 {
 
-  /**
-   * @param $key
-   * @return mixed
-   */
-  public function has($key);
+    /**
+     * @param $key
+     * @return mixed
+     */
+    public function has($key);
 
-  /**
-   * @param $element
-   * @return boolean
-   */
-  public function contains($element);
-  
-  /**
-   * @param $element
-   * @return integer
-   */
-  public function indexOf($element);
-  
-  /**
-   * @param $key
-   * @param null $default
-   * @return mixed
-   */
-  public function get($key, $default = null);
+    /**
+     * @param $element
+     * @return boolean
+     */
+    public function contains($element);
 
-  /**
-   * @param array $keys
-   * @return array
-   */
-  public function all(array $keys = []);
+    /**
+     * @param $element
+     * @return integer
+     */
+    public function indexOf($element);
 
-  /**
-   * @param array $elements
-   * @return $this
-   */
-  public function batch(array $elements);
+    /**
+     * @param $key
+     * @param null $default
+     * @return mixed
+     */
+    public function get($key, $default = null);
 
-  /**
-   * @param $offset
-   * @param $element
-   * @return $this
-   */
-  public function set($offset, $element);
+    /**
+     * @param array $keys
+     * @return array
+     */
+    public function all(array $keys = []);
 
-  /**
-   * @param $element
-   * @return $this
-   */
-  public function add($element);
-  
-  /**
-   * @param $element
-   * @return $this
-   */
-  public function push($element);
-  
-  /**
-   * @param $element
-   * @return $this
-   */
-  public function append($element);
-  
-  /**
-   * @param $element
-   * @return $this
-   */
-  public function prepend($element);
-  
-  /**
-   * @param $key
-   * @return mixed
-   */
-  public function remove($key);
-  
-  /**
-   * @param \Closure $callback
-   * @param \Closure|null $keyNameCallback
-   * @return mixed
-   */
-  public function map(\Closure $callback, \Closure $keyNameCallback = null);
+    /**
+     * @param array $elements
+     * @return $this
+     */
+    public function batch(array $elements);
 
-  /**
-   * @param \Closure $closure
-   * @return $this
-   */
-  public function each(\Closure $closure);
+    /**
+     * @param $offset
+     * @param $element
+     * @return $this
+     */
+    public function set($offset, $element);
 
-  /**
-   * @param \Closure $closure
-   * @return $this
-   */
-  public function filter(\Closure $closure);
+    /**
+     * @param $element
+     * @return $this
+     */
+    public function add($element);
 
-  /**
-   * @param \Closure $closure
-   * @return $this
-   */
-  public function sort(\Closure $closure);
+    /**
+     * @param $element
+     * @return $this
+     */
+    public function push($element);
 
-  /**
-   * @return boolean
-   */
-  public function exists();
-  
-  /**
-   * @return boolean
-   */
-  public function isEmpty();
-  
-  /**
-   * @return boolean
-   */
-  public function isNotEmpty();
+    /**
+     * @param $element
+     * @return $this
+     */
+    public function append($element);
 
-  /**
-   * @return $this
-   */
-  public function clear();
+    /**
+     * @param $element
+     * @return $this
+     */
+    public function prepend($element);
 
-  /**
-   * @return object
-   */
-  public function toObject();
+    /**
+     * @param $key
+     * @return mixed
+     */
+    public function remove($key);
 
-  /**
-   * @return array
-   */
-  public function toArray();
+    /**
+     * @param \Closure $callback
+     * @param \Closure|null $keyNameCallback
+     * @return mixed
+     */
+    public function map(\Closure $callback, \Closure $keyNameCallback = null);
 
-  /**
-   * @return string
-   */
-  public function toJSON();
+    /**
+     * @param \Closure $closure
+     * @return $this
+     */
+    public function each(\Closure $closure);
+
+    /**
+     * @param \Closure $closure
+     * @return $this
+     */
+    public function filter(\Closure $closure);
+
+    /**
+     * @param \Closure $closure
+     * @return $this
+     */
+    public function sort(\Closure $closure);
+
+    /**
+     * @return boolean
+     */
+    public function exists();
+
+    /**
+     * @return boolean
+     */
+    public function isEmpty();
+
+    /**
+     * @return boolean
+     */
+    public function isNotEmpty();
+
+    /**
+     * @return $this
+     */
+    public function clear();
+
+    /**
+     * @return object
+     */
+    public function toObject();
+
+    /**
+     * @return array
+     */
+    public function toArray();
+
+    /**
+     * @return string
+     */
+    public function toJSON();
 
 }

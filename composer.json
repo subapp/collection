@@ -1,19 +1,23 @@
 {
-  "name": "colibrilabs/collection",
+  "name": "subapp/collection",
   "description": "Collection Library",
   "keywords": ["php collection", "collection"],
   "authors": [
     {
       "name": "Ivan Hontarenko",
-      "email": "stewie.dev@gmail.com"
+      "email": "ihontarenko@gmail.com"
     }
   ],
   "license": "MIT",
   "type": "library",
-  "require": {"php": ">=5.6"},
+  "require": {
+    "php": ">=5.6",
+    "ext-json": "*",
+    "symfony/yaml": "~3.2"
+  },
   "autoload": {
     "psr-4": {
-      "Colibri\\Collection\\": "src/"
+      "Subapp\\Collection\\": "src/"
     }
   }
 }
