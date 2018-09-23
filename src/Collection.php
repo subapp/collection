@@ -56,7 +56,7 @@ class Collection implements CollectionInterface
      * @return $this
      * @throws CollectionException
      */
-    private function doSet($keyName = null, $element, $prepend = false)
+    protected function doSet($keyName = null, $element, $prepend = false)
     {
         if (null !== $this->className && !($element instanceof $this->className)) {
             throw new CollectionException(sprintf('Collection accept only objects which %s inherited', $this->className));
