@@ -70,7 +70,7 @@ class ParametersCollection extends Collection implements ParametersInterface
                 throw new \InvalidArgumentException('Cannot determine parser');
         }
 
-        return new ParametersCollection($parameters);
+        return new static($parameters);
     }
 
     /**
