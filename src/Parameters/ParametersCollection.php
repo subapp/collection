@@ -17,6 +17,18 @@ class ParametersCollection extends Collection implements ParametersInterface
     /**
      * @inheritDoc
      */
+    protected function doSet($keyName = null, $element, $prepend = false)
+    {
+        if (is_array($element)) {
+            $element = new static($element);
+        }
+    
+        return parent::doSet($keyName, $element, $prepend);
+    }
+    
+    /**
+     * @inheritDoc
+     */
     public static function createFromFile($filepath)
     {
         $file = new \SplFileInfo($filepath);
