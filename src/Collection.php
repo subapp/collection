@@ -26,13 +26,13 @@ class Collection implements CollectionInterface
      */
     public function __construct(array $data = [], $className = null)
     {
-        $this->setClassName($className)->batch($data);
+        $this->setClassName($className)->setBatch($data);
     }
 
     /**
      * @inheritDoc
      */
-    public function batch(array $data)
+    public function setBatch(array $data)
     {
         foreach ($data as $key => $value) {
             $this->set($key, $value);
@@ -50,26 +50,29 @@ class Collection implements CollectionInterface
     }
 
     /**
-     * @param null|string $keyName
-     * @param mixed $element
-     * @param bool $prepend
+     * @param null|string $key
+     * @param mixed       $element
+     * @param bool        $prepend
      * @return $this
      * @throws CollectionException
      */
-    protected function doSet($keyName = null, $element, $prepend = false)
+    protected function doSet($key = null, $element, $prepend = false)
     {
-        if (null !== $this->className && !($element instanceof $this->className)) {
-            throw new CollectionException(sprintf('Collection accept only objects which %s inherited', $this->className));
+        $className = $this->getClassName();
+        
+        if (null !== $className && !($element instanceof $className)) {
+            throw new CollectionException(sprintf('Collection accept only objects (%s) but (%s) passed',
+                $className, (is_object($element) ? get_class($element) : gettype($element))));
         }
 
-        if (null === $keyName) {
+        if (null === $key) {
             if (true === $prepend) {
                 array_unshift($this->storage, $element);
             } else {
                 array_push($this->storage, $element);
             }
         } else {
-            $this->storage[$keyName] = $element;
+            $this->storage[$key] = $element;
         }
 
         return $this;
@@ -381,7 +384,7 @@ class Collection implements CollectionInterface
      */
     public function unserialize($serialized)
     {
-        $this->batch(unserialize($serialized));
+        $this->setBatch(unserialize($serialized));
     }
 
 }

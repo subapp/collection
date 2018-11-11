@@ -17,13 +17,13 @@ class ParametersCollection extends Collection implements ParametersInterface
     /**
      * @inheritDoc
      */
-    protected function doSet($keyName = null, $element, $prepend = false)
+    protected function doSet($key = null, $element, $prepend = false)
     {
         if (is_array($element)) {
             $element = new static($element);
         }
     
-        return parent::doSet($keyName, $element, $prepend);
+        return parent::doSet($key, $element, $prepend);
     }
     
     /**

@@ -44,7 +44,7 @@ interface CollectionInterface extends \ArrayAccess, \IteratorAggregate, \Countab
      * @param array $elements
      * @return $this
      */
-    public function batch(array $elements);
+    public function setBatch(array $elements);
 
     /**
      * @param $offset

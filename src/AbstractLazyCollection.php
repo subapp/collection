@@ -88,9 +88,9 @@ abstract class AbstractLazyCollection implements CollectionInterface, ProxyInter
     /**
      * @inheritDoc
      */
-    public function batch(array $elements)
+    public function setBatch(array $elements)
     {
-        return $this->initialize()->collection->batch($elements);
+        return $this->initialize()->collection->setBatch($elements);
     }
 
     /**
