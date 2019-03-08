@@ -12,12 +12,12 @@ class Collection implements CollectionInterface
     /**
      * @var array
      */
-    protected $storage = [];
+    protected $elements = [];
 
     /**
      * @var string
      */
-    protected $className;
+    protected $class;
 
     /**
      * AbstractCollection constructor.
@@ -26,13 +26,39 @@ class Collection implements CollectionInterface
      */
     public function __construct(array $data = [], $className = null)
     {
-        $this->setClassName($className)->setBatch($data);
+        $this->setClass($className)->asBatch($data);
+    }
+    
+    /**
+     * @param $element
+     * @throws \InvalidArgumentException
+     */
+    private function validate($element)
+    {
+        if (!$this->isElementInstanceOf($element)) {
+            throw new \InvalidArgumentException(sprintf('Collection accept only objects (%s) but (%s) passed',
+                $this->getClass(), (is_object($element) ? get_class($element) : gettype($element))));
+        }
+    }
+    
+    /**
+     * @param $element
+     * @return boolean
+     */
+    private function isElementInstanceOf($element)
+    {
+        $class = $this->getClass();
+        
+        $isClassExist = class_exists($class);
+        $isInstanceOf = $isClassExist && is_object($element) && !($element instanceOf $class);
+        
+        return !$isClassExist || ($isClassExist && !$isInstanceOf);
     }
 
     /**
      * @inheritDoc
      */
-    public function setBatch(array $data)
+    public function asBatch(array $data)
     {
         foreach ($data as $key => $value) {
             $this->set($key, $value);
@@ -54,25 +80,19 @@ class Collection implements CollectionInterface
      * @param mixed       $element
      * @param bool        $prepend
      * @return $this
-     * @throws CollectionException
      */
     protected function doSet($key = null, $element, $prepend = false)
     {
-        $className = $this->getClassName();
-        
-        if (null !== $className && !($element instanceof $className)) {
-            throw new CollectionException(sprintf('Collection accept only objects (%s) but (%s) passed',
-                $className, (is_object($element) ? get_class($element) : gettype($element))));
-        }
+        $this->validate($element);
 
         if (null === $key) {
             if (true === $prepend) {
-                array_unshift($this->storage, $element);
+                array_unshift($this->elements, $element);
             } else {
-                array_push($this->storage, $element);
+                array_push($this->elements, $element);
             }
         } else {
-            $this->storage[$key] = $element;
+            $this->elements[$key] = $element;
         }
 
         return $this;
@@ -81,23 +101,23 @@ class Collection implements CollectionInterface
     /**
      * @return string
      */
-    public function getClassName()
+    public function getClass()
     {
-        return $this->className;
+        return $this->class;
     }
 
     /**
-     * @param string $className
+     * @param string $class
      * @return $this
      * @throws CollectionException
      */
-    public function setClassName($className)
+    public function setClass($class)
     {
-        if (null !== $className && !class_exists($className) && !interface_exists($className)) {
-            throw new CollectionException(sprintf('Class %s could not be found. Please set existed class name', $className));
+        if (null !== $class && !class_exists($class) && !interface_exists($class)) {
+            throw new CollectionException(sprintf('Class %s could not be found. Please set existed class name', $class));
         }
 
-        $this->className = $className;
+        $this->class = $class;
 
         return $this;
     }
@@ -147,7 +167,7 @@ class Collection implements CollectionInterface
      */
     public function all(array $keys = [])
     {
-        return empty($keys) ? $this->storage : array_intersect_key($this->storage, array_flip($keys));
+        return empty($keys) ? $this->elements : array_intersect_key($this->elements, array_flip($keys));
     }
 
     /**
@@ -163,7 +183,7 @@ class Collection implements CollectionInterface
      */
     public function keys()
     {
-        return array_keys($this->storage);
+        return array_keys($this->elements);
     }
 
     /**
@@ -214,7 +234,7 @@ class Collection implements CollectionInterface
      */
     public function sort(\Closure $closure)
     {
-        usort($this->storage, $closure);
+        usort($this->elements, $closure);
 
         return $this;
     }
@@ -248,7 +268,7 @@ class Collection implements CollectionInterface
      */
     public function count()
     {
-        return count($this->storage);
+        return count($this->elements);
     }
 
     /**
@@ -256,7 +276,7 @@ class Collection implements CollectionInterface
      */
     public function clear()
     {
-        $this->storage = [];
+        $this->elements = [];
 
         return $this;
     }
@@ -288,7 +308,7 @@ class Collection implements CollectionInterface
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->storage);
+        return new \ArrayIterator($this->elements);
     }
 
     /**
@@ -304,7 +324,7 @@ class Collection implements CollectionInterface
      */
     public function has($offset)
     {
-        return array_key_exists($offset, $this->storage);
+        return array_key_exists($offset, $this->elements);
     }
 
     /**
@@ -320,7 +340,7 @@ class Collection implements CollectionInterface
      */
     public function get($offset, $default = null)
     {
-        return $this->has($offset) ? $this->storage[$offset] : $default;
+        return $this->has($offset) ? $this->elements[$offset] : $default;
     }
 
     /**
@@ -344,7 +364,7 @@ class Collection implements CollectionInterface
      */
     public function remove($key)
     {
-        unset($this->storage[$key]);
+        unset($this->elements[$key]);
 
         return $this;
     }
@@ -384,7 +404,7 @@ class Collection implements CollectionInterface
      */
     public function unserialize($serialized)
     {
-        $this->setBatch(unserialize($serialized));
+        $this->asBatch(unserialize($serialized));
     }
 
 }
