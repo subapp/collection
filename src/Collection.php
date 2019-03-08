@@ -191,7 +191,7 @@ class Collection implements CollectionInterface
      */
     public function map(\Closure $callback, \Closure $keyNameCallback = null)
     {
-        $collection = new Collection();
+        $collection = new static();
 
         $this->each(function ($key, $element) use ($collection, $callback, $keyNameCallback) {
             $keyName = $keyNameCallback instanceof \Closure ? $keyNameCallback($element) : $key;
